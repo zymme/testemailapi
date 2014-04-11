@@ -17,7 +17,7 @@
 		<jdk.version>1.6</jdk.version>
 		<junit.version>4.9</junit.version>
 	</properties>
-
+  
 	<build>
 		<!-- Use a newer version of the install plugin than what your Maven uses 
 			by default. The older version failed to install the project if there was 
