@@ -10,4 +10,12 @@
     <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
     <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
     <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
 </mule-project>

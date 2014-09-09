@@ -44,19 +44,23 @@ public class DebugCallable implements Callable {
 		
 		boolean nextPart = true;
 		
+		nextPart = in.skipPreamble();
+		
 		DataHandler inboundDH = null;
 		DataHandler outboundDH = null;
 		File file = null;
+		
+		ByteArrayOutputStream data = null;
 
 		while(nextPart) {
-
+			
 			String headers = in.readHeaders();
 			System.out.println("Headers: " + headers);
 			
+			data =  new ByteArrayOutputStream();
 			
-			if(headers.indexOf("name=\"to\"") > -1 ){
+			if(headers.indexOf("name=\"to\"") > -1 ) {				
 				
-				ByteArrayOutputStream data = new ByteArrayOutputStream();
 				in.readBodyData(data);
 				String bodydata = new String(data.toByteArray());
 				
@@ -69,7 +73,7 @@ public class DebugCallable implements Callable {
 			}
 			else if(headers.indexOf("name=\"subject\"") > -1) {
 				
-				ByteArrayOutputStream data = new ByteArrayOutputStream();
+				data = new ByteArrayOutputStream();
 				in.readBodyData(data);
 				String bodydata = new String(data.toByteArray());
 				
@@ -78,9 +82,69 @@ public class DebugCallable implements Callable {
 				message.setProperty("subject", bodydata, PropertyScope.OUTBOUND);
 				
 			}
+			else if(headers.indexOf("name=\"from\"") > -1) {
+				
+				data = new ByteArrayOutputStream();
+				in.readBodyData(data);
+				String bodydata = new String(data.toByteArray());
+				
+				System.out.println(bodydata);
+				
+				message.setProperty("from", bodydata, PropertyScope.OUTBOUND);
+				
+			}
+			else if(headers.indexOf("name=\"replyto\"") > -1) {
+				
+				data = new ByteArrayOutputStream();
+				in.readBodyData(data);
+				String bodydata = new String(data.toByteArray());
+				
+				System.out.println(bodydata);
+				
+				message.setProperty("replyto", bodydata, PropertyScope.OUTBOUND);
+			}
+			else if(headers.indexOf("name=\"cc\"") > -1) {
+				data = new ByteArrayOutputStream();
+				in.readBodyData(data);
+				String bodydata = new String(data.toByteArray());
+				
+				System.out.println(bodydata);
+				
+				message.setProperty("cc", bodydata, PropertyScope.OUTBOUND);
+			}
+			else if(headers.indexOf("name=\"bcc\"") > -1) {
+				data = new ByteArrayOutputStream();
+				in.readBodyData(data);
+				String bodydata = new String(data.toByteArray());
+				
+				System.out.println(bodydata);
+				
+				message.setProperty("bcc", bodydata, PropertyScope.OUTBOUND);
+			}
+			else if(headers.indexOf("name=\"body\"") > -1) {
+				
+				data = new ByteArrayOutputStream();
+				in.readBodyData(data);
+				String bodydata = new String(data.toByteArray());
+				
+				System.out.println(bodydata);
+				
+				message.setProperty("body", bodydata, PropertyScope.OUTBOUND);
+				
+			}
+			else if(headers.indexOf("name=\"htmlbody\"") > -1) {
+				
+				data = new ByteArrayOutputStream();
+				in.readBodyData(data);
+				String bodydata = new String(data.toByteArray());
+				
+				System.out.println(bodydata);
+				
+				message.setProperty("htmlbody", bodydata, PropertyScope.OUTBOUND);
+				
+			}
 			else if(headers.indexOf("filename=") > -1) {
 
-				//Content-Type: image/jpeg
 				int filenameIndex = headers.indexOf("filename=");
 				int newlineIndex = headers.indexOf("\r\n");
 								
@@ -94,25 +158,19 @@ public class DebugCallable implements Callable {
 				
 				String finalContentType = contentType.substring(0, contentNewlineIndex);
 				
-				ByteArrayOutputStream data = new ByteArrayOutputStream();
+				data = new ByteArrayOutputStream();
 				in.readBodyData(data);
 				
 				ByteArrayDataSource bads = new ByteArrayDataSource(data.toByteArray(), finalContentType);
 				outboundDH = new DataHandler(bads);
 				
-//				message.addOutboundAttachment(filename, data, finalContentType);
 				message.addOutboundAttachment(filename, outboundDH);
 				
-
-				System.out.println(new String(data.toByteArray()));
+//				System.out.println(new String(data.toByteArray()));
 			}
 		
-
 			nextPart = in.readBoundary();
 			
-////			message.addOutboundAttachment(name, dataHandler)
-//			message.add
-
 		}
 	}
 	

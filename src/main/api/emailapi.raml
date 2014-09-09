@@ -1,0 +1,135 @@
+#%RAML 0.8
+title: Email API 
+version: 1.0
+baseUri: http://pinnacol.com/api/email/{version}
+protocols:  [ HTTP, HTTPS ]
+
+/testsend:
+  displayName: resourceName
+  
+  post:
+    body:
+      application/json:      
+        example: |
+          {
+            "to": "zed@pinnacol.com",
+            "subject":"test subject"
+          }
+          
+/testsendform:
+  post:
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+            to:
+              description: a comma seperated list of intended recipients
+              type: string
+              required: false
+              example: email@emailexample.com,email2@email-test.com
+            replyto: 
+              description: replyto field if needed.
+              type: string
+              required: false
+              example: replyto@email.com
+            subject:
+              description: the subject of the email
+              required: false
+              example: this is an example of a subject for the email
+            from:
+              description: who the email is from
+              required: false
+              example:  myfrom.email@email-test.com
+            cc:
+              description: a comma seperated list of the intended Carbon Copy recipients
+              required: false
+              example: recip1@email.com,recip2@email-test.com
+            bcc:
+              description: a comma seperated list of the intended Blind Carbon Copy recipients
+              required: false
+              example: recip1@email-test.com,recip2@email-test.com
+            body:
+              description: the text contents of the email body
+              required: false
+              example: This is some text that would be in the body of the email
+            htmlbody:
+              description: this html formatted text that would comprise of a html email
+              required: false
+              example: <html><body><h1>This is a heading</h1><p>A new paragraph</p></body></html>
+            
+            
+/testsendformMultiPart:
+    post:
+      body:
+          multipart/form-data:
+            formParameters:
+              to:
+                description: a comma seperated list of intended recipients
+                type: string
+                required: false
+                example: email@emailexample.com,email2@email-test.com
+              replyto: 
+                description: replyto field if needed.
+                type: string
+                required: false
+                example: replyto@email.com
+              subject:
+                description: the subject of the email
+                required: false
+                example: this is an example of a subject for the email
+              from:
+                description: who the email is from
+                required: false
+                example:  myfrom.email@email-test.com
+              cc:
+                description: a comma seperated list of the intended Carbon Copy recipients
+                required: false
+                example: recip1@email.com,recip2@email-test.com
+              bcc:
+                description: a comma seperated list of the intended Blind Carbon Copy recipients
+                required: false
+                example: recip1@email-test.com,recip2@email-test.com
+              body:
+                description: the text contents of the email body
+                required: false
+                example: This is some text that would be in the body of the email
+              htmlbody:
+                description: this html formatted text that would comprise of a html email
+                required: false
+                example: <html><body><h1>This is a heading</h1><p>A new paragraph</p></body></html>
+                
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "status":"success",
+                  "message":"email successfully sent"
+                }
+                
+                
+        500:
+            body:
+              application/json:
+                example: |
+                  {
+                    "status":"error",
+                    "message":"error message here"
+                  }
+             
+        
+/email:
+  /send:
+    post:
+      body:
+        application/x-www-form-urlencoded:
+        
+  /send/attachments:
+    post:
+      body:
+        multipart/form-data:
+        
+        
+        
+        
+        

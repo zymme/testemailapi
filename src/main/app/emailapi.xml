@@ -4,8 +4,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd" version="EE-3.4.2">
-    <apikit:config name="api-config" raml="api.raml" consoleEnabled="true" consolePath="console" doc:name="Router"/>
-    <apikit:mapping-exception-strategy name="api-apiKitGlobalExceptionMapping">
+    <apikit:config name="emailapi-config" raml="emailapi.raml" consoleEnabled="true" consolePath="console" doc:name="Router"/>
+    <apikit:mapping-exception-strategy name="emailapi-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
             <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
             <set-property propertyName="Content-Type" value="application/json" />
@@ -32,21 +32,27 @@ http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smt
             <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" />
         </apikit:mapping>
     </apikit:mapping-exception-strategy>
-    <flow name="api-main" doc:name="api-main">
-        <http:inbound-endpoint address="http://localhost:8081/api" doc:name="HTTP"/>
-        <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
-        <exception-strategy ref="api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    <flow name="emailapi-main" doc:name="emailapi-main">
+        <http:inbound-endpoint address="http://localhost:8081/email/api" doc:name="HTTP"/>
+        <apikit:router config-ref="emailapi-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="emailapi-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
-    <flow name="post:/testsendformMultiPart:api-config" doc:name="post:/testsendformMultiPart:api-config">
-        <component doc:name="Java" class="com.pinnacol.debug.DebugCallable"/>
-        <logger level="INFO" doc:name="Logger"/>
+    <flow name="post:/testsendformMultiPart:emailapi-config" doc:name="post:/testsendformMultiPart:emailapi-config">
+    	<component doc:name="Java" class="com.pinnacol.debug.DebugCallable" />
+        <logger level="INFO" doc:name="Logger" />
         <smtp:outbound-endpoint host="smtp.pinnacol.com" to="#[message.outboundProperties['to']]" from="zed@pinnacol.com" subject="#[message.outboundProperties['subject']]" responseTimeout="10000" doc:name="SMTP"/>
+        <set-payload value="{&#xA;  &quot;status&quot;:&quot;success&quot;,&#xA;  &quot;message&quot;:&quot;email successfully sent&quot;&#xA;}" doc:name="Set Payload"/>
+    </flow>
+    <flow name="post:/testsendform:emailapi-config" doc:name="post:/testsendform:emailapi-config">
         <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
     </flow>
-    <flow name="post:/testsendform:api-config" doc:name="post:/testsendform:api-config">
+    <flow name="post:/email/send:emailapi-config" doc:name="post:/email/send:emailapi-config">
         <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
     </flow>
-    <flow name="post:/testsend:api-config" doc:name="post:/testsend:api-config">
+    <flow name="post:/email/send/attachments:emailapi-config" doc:name="post:/email/send/attachments:emailapi-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="post:/testsend:emailapi-config" doc:name="post:/testsend:emailapi-config">
         <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
     </flow>
 </mule>
